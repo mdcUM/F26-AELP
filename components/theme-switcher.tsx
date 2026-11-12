@@ -10,18 +10,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
-
-const subscribe = () => () => {};
+import { useEffect, useState } from "react";
 
 const ThemeSwitcher = () => {
-  // false during SSR and hydration, true on the client, so the theme UI only renders once it's known
-  const mounted = useSyncExternalStore(
-    subscribe,
-    () => true,
-    () => false,
-  );
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard next-themes hydration guard
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return null;
