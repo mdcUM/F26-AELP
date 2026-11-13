@@ -9,6 +9,7 @@ export default function AdminLayout({
     <div className="flex min-h-screen">
       <aside className="w-56 border-r p-4 flex flex-col gap-2">
         <p className="font-bold mb-4">AELP admin side</p>
+        <Link href="/admin">Home</Link>
         <Link href="/admin/review">Review queue</Link>
         <Link href="/admin/entries">Entries</Link>
         <Link href="/admin/companies">Companies</Link>
