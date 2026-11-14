@@ -18,6 +18,10 @@ export async function GET(request: NextRequest) {
     });
     if (!error) {
       // redirect user to specified redirect URL or root of app
+      // so internal routes only
+      if (!next.startsWith("/") || next.startsWith("//")) {
+        redirect(`/auth/error?error=Invalid redirect URL`);
+      }
       redirect(next);
     } else {
       // redirect the user to an error page with some instructions
