@@ -4,7 +4,7 @@ export type Article = {
 
     id: number;
     title: string;
-    source_link: string;
+    source_link: HttpUrl;
     published_at: string;
     company_id: number;
     tags: string[];
