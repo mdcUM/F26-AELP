@@ -1,4 +1,7 @@
+type HttpUrl = `http://${string}` | `https://${string}`;
+
 export type Article = {
+
     id: number;
     title: string;
     source_link: string;
