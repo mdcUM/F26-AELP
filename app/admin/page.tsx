@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { Suspense } from "react";
+import { hasEnvVars } from "@/lib/utils";
+import Link from "next/link";
 
 
 async function UserDetails() {
