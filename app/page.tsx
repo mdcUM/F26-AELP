@@ -2,6 +2,7 @@ import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
+import { Questionnaire } from "@/components/questionnaire";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-steps";
 import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
@@ -44,6 +45,14 @@ export default function Home() {
             <h2 className="font-medium text-xl mb-4">Next steps</h2>
             {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
           </main>
+
+          <div className="flex justify-center">
+            <Button asChild size="lg">
+              <Link href="#questionnaire">Go to the questionnaire</Link>
+            </Button>
+          </div>
+
+          <Questionnaire />
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
