@@ -46,12 +46,6 @@ export default function Home() {
             {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
           </main>
 
-          <div className="flex justify-center">
-            <Button asChild size="lg">
-              <Link href="#questionnaire">Go to the questionnaire</Link>
-            </Button>
-          </div>
-
           <Questionnaire />
         </div>
 
