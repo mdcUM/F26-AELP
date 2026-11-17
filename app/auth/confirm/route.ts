@@ -3,6 +3,7 @@ import { type EmailOtpType } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
@@ -19,10 +20,27 @@ export async function GET(request: NextRequest) {
     if (!error) {
       // redirect user to specified redirect URL or root of app
       // so internal routes only
-      if (!next.startsWith("/") || next.startsWith("//")) {
-        redirect(`/auth/error?error=Invalid redirect URL`);
+
+      // note that there are two kind of error handles here. If the auth fails, it goes to /auth/error?error, but if the callback is disallowed, then it goes to the fallback /admin callback
+
+      if (!next) {
+        redirect(`/admin`);
+      } else {
+
+        try {
+          // pretty much just makes sure its a same origin url
+          const url = new URL(next, "http://local");
+
+          if (url.origin === "http://local") {
+            redirect(url.pathname + url.search + url.hash);
+          } else {
+            redirect(`/admin`);
+          }
+        } catch {
+          redirect(`/admin`);
+        }
       }
-      redirect(next);
+
     } else {
       // redirect the user to an error page with some instructions
       redirect(`/auth/error?error=${error?.message}`);

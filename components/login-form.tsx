@@ -44,8 +44,25 @@ export function LoginForm({
 
       const next = searchParams.get("next");
 
-      const destination =
-        next?.startsWith("/") && !next.startsWith("//") ? next : "/admin";
+      let destination;
+
+      if (!next) {
+        destination = "/admin";
+      } else {
+
+        try {
+          // pretty much just makes sure its a same origin url
+          const url = new URL(next, "http://local");
+
+          if (url.origin === "http://local") {
+            destination = url.pathname + url.search + url.hash;
+          } else {
+            destination = "/admin";
+          }
+        } catch {
+          destination = "/admin";
+        }
+      }
 
       router.push(destination);
     } catch (error: unknown) {
