@@ -1,14 +1,12 @@
+import { Suspense } from "react";
 import { EntryDetailsForm } from "@/components/admin/entries/entry-details-form";
 import { EntryCompaniesIssues } from "@/components/admin/entries/entry-companies-issues";
 import { EntryPublicationPanel } from "@/components/admin/entries/entry-publication-panel";
 import { EntryLivePreview } from "@/components/admin/entries/entry-live-preview";
 
 // Individual entry editor: form on the left, publication + preview on the right.
-export default async function EntryPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+// `params` is runtime data, so with Cache Components it must be read inside <Suspense>.
+async function EntryEditor({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   return (
@@ -25,5 +23,17 @@ export default async function EntryPage({
         </aside>
       </div>
     </div>
+  );
+}
+
+export default function EntryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense fallback={<p>Loading entry…</p>}>
+      <EntryEditor params={params} />
+    </Suspense>
   );
 }
