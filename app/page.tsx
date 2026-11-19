@@ -8,6 +8,19 @@ import { SiteNav } from "@/components/site_navigation";
 
 // shadcn imports
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 export default function Home() {
   return (
@@ -25,6 +38,39 @@ export default function Home() {
             {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
           </main>
         </div>
+
+        <Tabs defaultValue="Companies" className="w-[400px]">
+      <TabsList>
+        <TabsTrigger value="Companies">Companies</TabsTrigger>
+        <TabsTrigger value="Articles">Articles</TabsTrigger>
+      </TabsList>
+      <TabsContent value="Companies">
+        <Card>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+            <CardDescription>
+              Companies show up here
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            HI vienna wuz here
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="Articles">
+        <Card>
+          <CardHeader>
+            <CardTitle>Articles</CardTitle>
+            <CardDescription>
+              Some articles by AELP
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            hehe haha
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
           <p>
