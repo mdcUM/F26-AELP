@@ -18,21 +18,14 @@ export type Company = {
     tags: string[];
 };
 
-export const ENTRY_TYPES = [
-  "government_action",
-  "news_report",
-  "aelp_research",
-  "merger_acquisition",
+export const ENTRY_TYPE_OPTIONS = [
+  { value: "government_action", label: "Government and court action" },
+  { value: "news_report", label: "News report" },
+  { value: "aelp_research", label: "AELP research" },
+  { value: "merger_acquisition", label: "Merger or acquisition" },
 ] as const;
 
-export type EntryType = (typeof ENTRY_TYPES)[number];
-
-export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
-  government_action: "Government and court action",
-  news_report: "News report",
-  aelp_research: "AELP research",
-  merger_acquisition: "Merger or acquisition",
-};
+export type EntryType = (typeof ENTRY_TYPE_OPTIONS)[number]["value"];
 
 export type EntryStatus = "draft" | "published";
 
@@ -76,6 +69,6 @@ export const EMPTY_ENTRY: EntryInput = {
 export type EntryRecord = EntryInput & {
   id: number;
   status: EntryStatus;
-  updated_at: string | null;
-  updated_by_name: string | null;
+  updated_at: string;
+  updated_by_name: string;
 };
