@@ -14,7 +14,7 @@ export type SubmissionPayload = {
   description: string;
   submitterName: string;
   submitterEmail: string;
-  website: string; // honeypot, used in PR B
+  website: string; //honeypot: hidden from humans
 };
 
 type Errors = Partial<Record<keyof SubmissionPayload, string>>;
@@ -25,7 +25,8 @@ const textareaClass =
 function isValidUrl(value: string) {
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+    return /^([a-z0-9-]+\.)+(?:[a-z]{2,}|xn--[a-z0-9-]+)$/i.test(url.hostname);
   } catch {
     return false;
   }
@@ -55,7 +56,7 @@ export function SubmissionForm() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const get = (key: string) => String(data.get(key) ?? "");
+    const get = (key: keyof SubmissionPayload) => String(data.get(key) ?? "");
     const payload: SubmissionPayload = {
       type,
       title: get("title"),
@@ -66,12 +67,16 @@ export function SubmissionForm() {
       website: get("website"),
     };
 
+    if (payload.website) {
+      setStatus("success");
+      return;
+    }
     const found = validate(payload);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
     setStatus("submitting");
-    console.log("submission payload", payload); // PR B replaces this
+    console.log("submission payload", payload); // we need to send ts to supabase
     setStatus("success");
   }
 
