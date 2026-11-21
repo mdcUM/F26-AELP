@@ -1,5 +1,5 @@
 export function ReviewTabs() {
   return (
-    <div>Status tabs: New / Reviewed / Archived</div>
+    <div>Status tabs: New / Reviewed / Archived / Spam</div>
   );
 }
