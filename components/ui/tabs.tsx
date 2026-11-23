@@ -55,11 +55,12 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
       className={cn(
         // ...the existing shadcn classes stay here...
 
-        // your Figma overrides
+        //Figma overrides
         "flex-1 rounded-none bg-transparent px-4 py-3 text-sm font-medium text-muted-foreground",
         "shadow-none border-b-2 border-transparent -mb-px",
         "data-[state=active]:border-brand data-[state=active]:text-foreground data-[state=active]:font-semibold",
         "data-[state=active]:bg-transparent data-[state=active]:shadow-none",
+       " focus-visible:outline-none focus-visible:ring-0",
 
         className // keep this last so per-usage overrides still work
       )}

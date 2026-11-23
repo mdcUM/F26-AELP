@@ -14,7 +14,8 @@ const toggleVariants = cva(
 outline:
   "border border-border bg-transparent text-foreground text-xs font-medium " +
   "hover:bg-muted " +
-  "data-[state=on]:bg-navy data-[state=on]:text-white data-[state=on]:border-navy"      },
+  "data-[state=on]:bg-navy data-[state=on]:text-white data-[state=on]:border-navy " +
+  "dark:data-[state=on]:bg-white dark:data-[state=on]:text-navy dark:data-[state=on]:border-white"     },
       size: {
         default:
           "h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",

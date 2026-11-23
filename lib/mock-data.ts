@@ -77,3 +77,40 @@ export const articles: Article[] = [
     tags: ["workers"],
   },
 ];
+
+// lib/mock-data.ts
+export const companyFilters = [
+  { value: "amazon", label: "Amazon", count: 9 },
+  { value: "apple", label: "Apple", count: 6 },
+  { value: "google", label: "Google", count: 7 },
+  { value: "meta", label: "Meta", count: 5 },
+  { value: "microsoft", label: "Microsoft", count: 3 },
+]
+
+export const companyCards = [
+  { slug: "amazon", name: "Amazon", also: "Ring, Whole Foods, One Medical", articles: 9,
+    tags: ["Prices", "Privacy and surveillance", "Workers"],
+    latest: "Amazon raises seller fees for third year" },
+  { slug: "apple", name: "Apple", also: "App Store, iCloud, Apple Pay", articles: 6,
+    tags: ["Competition", "Privacy and surveillance"],
+    latest: "Apple App Store fees challenged by developers" },
+  { slug: "google", name: "Google", also: "YouTube, Android, DoubleClick", articles: 7,
+    tags: ["Competition", "Privacy and surveillance"],
+    latest: "Google ad tech ruling appealed" },
+  { slug: "meta", name: "Meta", also: "Facebook, Instagram, WhatsApp", articles: 5,
+    tags: ["Kids and safety", "Privacy and surveillance"],
+    latest: "Meta settles child safety case for $17B" },
+  { slug: "microsoft", name: "Microsoft", also: "Azure, LinkedIn, Xbox", articles: 3,
+    tags: ["Competition", "Workers"],
+    latest: "Microsoft cloud licensing draws EU complaint" },  
+]
+
+export type CompanyCardData = (typeof companyCards)[number]
+
+export const tagStyles: Record<string, string> = {
+  "Prices": "bg-amber-100 text-amber-900 [&>i]:bg-amber-500",
+  "Privacy and surveillance": "bg-purple-100 text-purple-900 [&>i]:bg-purple-500",
+  "Workers": "bg-emerald-100 text-emerald-900 [&>i]:bg-emerald-500",
+  "Competition": "bg-blue-100 text-blue-900 [&>i]:bg-blue-500",
+  "Kids and safety": "bg-pink-100 text-pink-900 [&>i]:bg-pink-500",
+}
