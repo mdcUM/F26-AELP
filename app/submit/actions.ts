@@ -1,5 +1,6 @@
 "use server";
 
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { SubmissionPayload } from "@/components/submission-form";
 
@@ -14,7 +15,7 @@ export async function submitSubmission(
     return { ok: false, error: "Invalid submission." };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { error } = await supabase.from("submissions").insert({
     proposed_type: p.type,
