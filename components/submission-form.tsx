@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isValidUrl } from "@/lib/utils";
 
 export type SubmissionType = "article" | "company";
 
@@ -21,16 +22,6 @@ type Errors = Partial<Record<keyof SubmissionPayload, string>>;
 
 const textareaClass =
   "border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-28 w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2";
-
-function isValidUrl(value: string) {
-  try {
-    const url = new URL(value);
-    if (url.protocol !== "http:" && url.protocol !== "https:") return false;
-    return /^([a-z0-9-]+\.)+(?:[a-z]{2,}|xn--[a-z0-9-]+)$/i.test(url.hostname);
-  } catch {
-    return false;
-  }
-}
 
 function validate(p: SubmissionPayload): Errors {
   const errors: Errors = {};
