@@ -1,5 +1,4 @@
 import type { EntryInput, EntryStatus } from "@/lib/types";
-import { isValidUrl } from "@/lib/utils";
 
 export const SUMMARY_MAX = 320;
 
@@ -17,10 +16,9 @@ export function validateEntry(input: EntryInput, status: EntryStatus) {
     errors.summary = "Add a short summary.";
   }
 
-  const sourceUrl = input.source_url.trim();
-  if (sourceUrl && !isValidUrl(sourceUrl)) {
+  if (input.source_url && !/^https?:\/\/\S+$/.test(input.source_url)) {
     errors.source_url = "Use a full link starting with http:// or https://.";
-  } else if (publishing && !sourceUrl) {
+  } else if (publishing && !input.source_url) {
     errors.source_url = "Add a link to the article.";
   }
 
