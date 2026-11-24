@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { submitSubmission } from "@/app/submit/actions";
 
 export type SubmissionType = "article" | "company";
 
@@ -76,8 +77,8 @@ export function SubmissionForm() {
     if (Object.keys(found).length > 0) return;
 
     setStatus("submitting");
-    console.log("submission payload", payload); // we need to send ts to supabase
-    setStatus("success");
+    const result = await submitSubmission(payload);
+    setStatus(result.ok ? "success" : "error");
   }
 
   if (status === "success") {
