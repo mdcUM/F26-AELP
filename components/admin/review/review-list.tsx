@@ -1,11 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 
-export async function ReviewList() {
+export async function ReviewList({ status }: { status: string }) {
   const supabase = await createClient();
-  const { data: submissions, error } = await supabase
-    .from("submissions")
-    .select("id, created_at, title, content, link, submitter_info, status")
-    .order("created_at", { ascending: false });
+
+  let query = supabase
+  .from("submissions")
+  .select("id, created_at, title, content, link, submitter_info, status");
+
+  if (status !== "all") {
+    query = query.eq("status", status);
+  }
+
+  const { data: submissions, error } = await query.order("created_at", { ascending: false });
 
   if (error) return <p>Error: {error.message}</p>;
   if (submissions.length === 0) return <p>empty!</p>;
