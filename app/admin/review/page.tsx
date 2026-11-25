@@ -25,11 +25,11 @@ export default function ReviewPage({ searchParams }: Props) {
 }
 
 async function TabsWithStatus({ searchParams }: Props) {
-  const { status = "pending" } = await searchParams;
+  const { status = "new" } = await searchParams;
   return <ReviewTabs current={status} />;
 }
 
 async function ListWithStatus({ searchParams }: Props) {
-  const { status = "pending" } = await searchParams;
+  const { status = "new" } = await searchParams;
   return <ReviewList status={status} />;
 }

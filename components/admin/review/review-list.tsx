@@ -5,7 +5,7 @@ export async function ReviewList({ status }: { status: string }) {
 
   let query = supabase
   .from("submissions")
-  .select("id, created_at, title, content, link, submitter_info");
+  .select("id, created_at, title, content, link, submitter_info, status");
 
   if (status !== "all") {
     query = query.eq("status", status);
@@ -25,7 +25,7 @@ export async function ReviewList({ status }: { status: string }) {
         <p>content: {s.content}</p>
         <p>link: {s.link}</p>
         <p>submitter_info: {s.submitter_info}</p>
-        <p>status: {status}</p>
+        <p>status: {s.status}</p>
       </li>
     ))}
   </ul>
