@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
-export async function ReviewList({ status }: { status: string }) {
+export async function ReviewList({ status, selectedId }: { status: string ; selectedId?: string}) {
   const supabase = await createClient();
 
   let query = supabase
@@ -20,12 +21,16 @@ export async function ReviewList({ status }: { status: string }) {
   <ul className="border">
     {submissions.map((s) => (
       <li key={s.id} className="p-3 border-b last:border-b-0 text-sm">
-        <p>created_at: {s.created_at}</p>
-        <p>title: {s.title}</p>
-        <p>content: {s.content}</p>
-        <p>link: {s.link}</p>
-        <p>submitter_info: {s.submitter_info}</p>
-        <p>status: {s.status}</p>
+        <Link
+          href={`/admin/review?status=${status}&id=${s.id}`}
+          scroll={false}
+          className={`block p-2 ${String(s.id) === selectedId ? "bg-muted" : ""}`}
+        >
+        <p>{new Date(s.created_at).toLocaleDateString()}</p>
+        <p>{s.title}</p>
+        <p>{s.status}</p>
+
+        </Link>
       </li>
     ))}
   </ul>

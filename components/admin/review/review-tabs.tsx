@@ -2,9 +2,8 @@ import Link from "next/link";
 
 const tabs = [
   { label: "New", status: "new" },
-  { label: "Reviewed", status: "reviewed" },
   { label: "Follow Up", status: "follow-up" },
-  { label: "Archived", status: "archived" },
+  { label: "Reviewed", status: "reviewed" },
   { label: "Spam", status: "spam" },
   { label: "All", status: "all" },
 ];

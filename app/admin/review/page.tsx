@@ -3,7 +3,7 @@ import { ReviewTabs } from "@/components/admin/review/review-tabs";
 import { ReviewList } from "@/components/admin/review/review-list";
 import { ReviewDetails } from "@/components/admin/review/review-details";
 
-type Props = { searchParams: Promise<{ status?: string }> };
+type Props = { searchParams: Promise<{ status?: string ; id?: string}> };
 
 export default function ReviewPage({ searchParams }: Props) {
   return (
@@ -18,7 +18,9 @@ export default function ReviewPage({ searchParams }: Props) {
         <Suspense fallback={<p>Loading…</p>}>
           <ListWithStatus searchParams={searchParams} />
         </Suspense>
-        <ReviewDetails />
+        <Suspense fallback={<p>Loading…</p>}>
+          <DetailWithId searchParams={searchParams} />
+        </Suspense>
       </div>
     </div>
   );
@@ -30,6 +32,11 @@ async function TabsWithStatus({ searchParams }: Props) {
 }
 
 async function ListWithStatus({ searchParams }: Props) {
-  const { status = "new" } = await searchParams;
-  return <ReviewList status={status} />;
+  const { status = "new" , id} = await searchParams;
+  return <ReviewList status={status} selectedId={id}/>;
+}
+
+async function DetailWithId({ searchParams }: Props) {
+  const { id } = await searchParams;
+  return <ReviewDetails id={id} />;
 }
