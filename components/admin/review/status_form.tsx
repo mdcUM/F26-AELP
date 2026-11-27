@@ -40,7 +40,8 @@ export function StatusForm({
     }
     setNoteState("saved");
     router.refresh();
-    }
+    toast(`Notes saved`, {});
+  }
 
   async function save(formData: FormData) {
     const status = formData.get("status") as string;
