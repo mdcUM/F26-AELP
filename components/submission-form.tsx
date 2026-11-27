@@ -6,6 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { submitSubmission } from "@/app/submit/actions";
 import { isValidUrl } from "@/lib/utils";
+import {
+  INDUSTRIES,
+  REPORTER_ROLES,
+  STATES,
+  TIMEFRAMES,
+} from "@/lib/submission-options";
 
 export type SubmissionType = "article" | "company";
 
@@ -16,6 +22,11 @@ export type SubmissionPayload = {
   description: string;
   submitterName: string;
   submitterEmail: string;
+  industry: string;
+  state: string;
+  timeframe: string;
+  reporterRole: string;
+  followUpOk: boolean;
   website: string; //honeypot: hidden from humans
 };
 
@@ -23,6 +34,31 @@ type Errors = Partial<Record<keyof SubmissionPayload, string>>;
 
 const textareaClass =
   "border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-28 w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2";
+const selectClass =
+  "border-input bg-background focus-visible:ring-ring h-9 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2";
+
+function SelectField(props: {
+  id: string;
+  label: string;
+  options: readonly string[];
+  placeholder: string;
+}) {
+  const { id, label, options, placeholder } = props;
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={id}>{label}</Label>
+      <select id={id} name={id} className={selectClass} defaultValue="">
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 
 function validate(p: SubmissionPayload): Errors {
   const errors: Errors = {};
@@ -36,6 +72,9 @@ function validate(p: SubmissionPayload): Errors {
   }
   if (p.submitterEmail.trim() && !/^\S+@\S+\.\S+$/.test(p.submitterEmail.trim())) {
     errors.submitterEmail = "Enter a valid email address.";
+  }
+  if (p.followUpOk && !p.submitterEmail.trim()) {
+    errors.submitterEmail = "Add your email so we can follow up.";
   }
   return errors;
 }
@@ -56,6 +95,11 @@ export function SubmissionForm() {
       description: get("description"),
       submitterName: get("submitterName"),
       submitterEmail: get("submitterEmail"),
+      industry: get("industry"),
+      state: get("state"),
+      timeframe: get("timeframe"),
+      reporterRole: get("reporterRole"),
+      followUpOk: data.get("followUpOk") === "on",
       website: get("website"),
     };
 
@@ -133,7 +177,24 @@ export function SubmissionForm() {
           )}
         </div>
       </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectField id="industry" label="Industry" options={INDUSTRIES} placeholder="Select an industry" />
+        <SelectField id="state" label="Where? (state)" options={STATES} placeholder="Select a state" />
+        <SelectField id="timeframe" label="When did this happen?" options={TIMEFRAMES} placeholder="Select" />
+        <SelectField id="reporterRole" label="You are a..." options={REPORTER_ROLES} placeholder="Select" />
+      </div>
 
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" name="followUpOk" className="mt-1" />
+        <span>
+          <span className="font-medium">AELP can follow up with me</span>
+          <br />
+          <span className="text-xs text-muted-foreground">
+            Your email is never published or shared.
+          </span>
+        </span>
+      </label>
+      
       {/* Honeypot: hidden from humans, bots tend to fill it */}
       <input
         name="website"
