@@ -36,8 +36,9 @@ function SelectField(props: {
   label: string;
   options: readonly string[];
   placeholder: string;
+  error?: string;
 }) {
-  const { id, label, options, placeholder } = props;
+  const { id, label, options, placeholder, error } = props;
   return (
     <div className="grid gap-2">
       <Label htmlFor={id}>{label}</Label>
@@ -49,6 +50,7 @@ function SelectField(props: {
           </option>
         ))}
       </select>
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 }
@@ -66,6 +68,10 @@ function validate(p: SubmissionPayload): Errors {
   if (p.followUpOk && !email) {
     errors.email = "Add your email so we can follow up.";
   }
+  if (!p.industry) errors.industry = "Select an industry.";
+  if (!p.state) errors.state = "Select a state.";
+  if (!p.timeframe) errors.timeframe = "Select when this happened.";
+  if (!p.reporterRole) errors.reporterRole = "Select your role.";
   return errors;
 }
 
@@ -133,6 +139,7 @@ export function SubmissionForm() {
           label="Industry"
           options={INDUSTRIES}
           placeholder="Select an industry"
+          error={errors.industry}
         />
       </div>
 
@@ -150,9 +157,9 @@ export function SubmissionForm() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <SelectField id="state" label="Where? (state)" options={STATES} placeholder="Select a state" />
-        <SelectField id="timeframe" label="When did this happen?" options={TIMEFRAMES} placeholder="Select" />
-        <SelectField id="reporterRole" label="You are a..." options={REPORTER_ROLES} placeholder="Select" />
+        <SelectField id="state" label="Where? (state)" options={STATES} placeholder="Select a state" error={errors.state}/>
+        <SelectField id="timeframe" label="When did this happen?" options={TIMEFRAMES} placeholder="Select" error={errors.timeframe}/>
+        <SelectField id="reporterRole" label="You are a..." options={REPORTER_ROLES} placeholder="Select" error={errors.reporterRole}/>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import type { SubmissionPayload } from "@/components/submission-form";
 import { INDUSTRIES, REPORTER_ROLES, STATES, TIMEFRAMES } from "@/lib/submission-options";
 
-const isAllowed = (list: readonly string[], v: string) => v === "" || list.includes(v);
+const isAllowed = (list: readonly string[], v: string) => list.includes(v);
 
 export async function submitSubmission(
   p: SubmissionPayload,
