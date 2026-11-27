@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function AdminLayout({
   children,
@@ -38,6 +39,7 @@ export default function AdminLayout({
           <Link href="/admin/companies">Companies</Link>
         </aside>
         <main className="flex-1 p-8">{children}</main>
+        <Toaster />
       </div>
     </div>
   );

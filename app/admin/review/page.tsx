@@ -60,6 +60,6 @@ async function ListWithStatus({ searchParams }: Props) {
 }
 
 async function DetailWithId({ searchParams }: Props) {
-  const { id } = await searchParams;
-  return <ReviewDetails id={id} />;
+  const { status = "new", id } = await searchParams;
+  return <ReviewDetails id={id} tab={status} />;
 }

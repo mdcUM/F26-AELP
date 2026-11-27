@@ -14,10 +14,3 @@ export async function setStatus(id: string, status: string) {
 
   revalidatePath("/admin/review");
 }
-
-export async function setStatusFromForm(formData: FormData) {
-  await setStatus(
-    formData.get("id") as string,
-    formData.get("status") as string,
-  );
-}
