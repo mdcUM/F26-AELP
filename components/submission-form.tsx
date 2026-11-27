@@ -5,17 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { submitSubmission } from "@/app/submit/actions";
-import { isValidUrl } from "@/lib/utils";
-
-export type SubmissionType = "article" | "company";
+import {
+  INDUSTRIES,
+  REPORTER_ROLES,
+  STATES,
+  TIMEFRAMES,
+} from "@/lib/submission-options";
 
 export type SubmissionPayload = {
-  type: SubmissionType;
-  title: string;
-  link: string;
+  company: string;
+  industry: string;
   description: string;
-  submitterName: string;
-  submitterEmail: string;
+  state: string;
+  timeframe: string;
+  reporterRole: string;
+  email: string;
+  followUpOk: boolean;
   website: string; //honeypot: hidden from humans
 };
 
@@ -23,25 +28,48 @@ type Errors = Partial<Record<keyof SubmissionPayload, string>>;
 
 const textareaClass =
   "border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-28 w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2";
+const selectClass =
+  "border-input bg-background focus-visible:ring-ring h-9 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2";
+
+function SelectField(props: {
+  id: string;
+  label: string;
+  options: readonly string[];
+  placeholder: string;
+}) {
+  const { id, label, options, placeholder } = props;
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={id}>{label}</Label>
+      <select id={id} name={id} className={selectClass} defaultValue="">
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 function validate(p: SubmissionPayload): Errors {
   const errors: Errors = {};
-  if (!p.title.trim()) {
-    errors.title = p.type === "article" ? "Headline is required." : "Company name is required.";
+  const email = p.email.trim();
+  if (!p.company.trim()) errors.company = "Company is required.";
+  if (!p.description.trim()) {
+    errors.description = "Tell us what you saw or experienced.";
   }
-  if (p.type === "article" && !p.link.trim()) {
-    errors.link = "A link to the article is required.";
-  } else if (p.link.trim() && !isValidUrl(p.link.trim())) {
-    errors.link = "Enter a full URL starting with http:// or https://";
+  if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+    errors.email = "Enter a valid email address.";
   }
-  if (p.submitterEmail.trim() && !/^\S+@\S+\.\S+$/.test(p.submitterEmail.trim())) {
-    errors.submitterEmail = "Enter a valid email address.";
+  if (p.followUpOk && !email) {
+    errors.email = "Add your email so we can follow up.";
   }
   return errors;
 }
 
 export function SubmissionForm() {
-  const [type, setType] = useState<SubmissionType>("article");
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
@@ -50,12 +78,14 @@ export function SubmissionForm() {
     const data = new FormData(e.currentTarget);
     const get = (key: keyof SubmissionPayload) => String(data.get(key) ?? "");
     const payload: SubmissionPayload = {
-      type,
-      title: get("title"),
-      link: get("link"),
+      company: get("company"),
+      industry: get("industry"),
       description: get("description"),
-      submitterName: get("submitterName"),
-      submitterEmail: get("submitterEmail"),
+      state: get("state"),
+      timeframe: get("timeframe"),
+      reporterRole: get("reporterRole"),
+      email: get("email"),
+      followUpOk: data.get("followUpOk") === "on",
       website: get("website"),
     };
 
@@ -87,51 +117,60 @@ export function SubmissionForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
-      <div className="flex gap-2">
-        {(["article", "company"] as const).map((t) => (
-          <Button
-            key={t}
-            type="button"
-            variant={type === t ? "default" : "outline"}
-            onClick={() => setType(t)}
-          >
-            {t === "article" ? "Suggest an article" : "Suggest a company"}
-          </Button>
-        ))}
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-6 rounded-md border p-6"
+      noValidate
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-2">
+          <Label htmlFor="company">Company</Label>
+          <Input id="company" name="company" placeholder="e.g. Invitation Homes" />
+          {errors.company && <p className="text-sm text-red-500">{errors.company}</p>}
+        </div>
+        <SelectField
+          id="industry"
+          label="Industry"
+          options={INDUSTRIES}
+          placeholder="Select an industry"
+        />
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="title">{type === "article" ? "Headline" : "Company name"}</Label>
-        <Input id="title" name="title" />
-        {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+        <Label htmlFor="description">What did you see or experience?</Label>
+        <textarea
+          id="description"
+          name="description"
+          className={textareaClass}
+          placeholder="Plain language is great. Include dates, places, and names if you know them."
+        />
+        {errors.description && (
+          <p className="text-sm text-red-500">{errors.description}</p>
+        )}
       </div>
 
-      <div className="grid gap-2">
-        <Label htmlFor="link">
-          {type === "article" ? "Article link" : "Company website (optional)"}
-        </Label>
-        <Input id="link" name="link" type="url" placeholder="https://" />
-        {errors.link && <p className="text-sm text-red-500">{errors.link}</p>}
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="description">Why should we include this? (optional)</Label>
-        <textarea id="description" name="description" className={textareaClass} />
+      <div className="grid gap-4 sm:grid-cols-3">
+        <SelectField id="state" label="Where? (state)" options={STATES} placeholder="Select a state" />
+        <SelectField id="timeframe" label="When did this happen?" options={TIMEFRAMES} placeholder="Select" />
+        <SelectField id="reporterRole" label="You are a..." options={REPORTER_ROLES} placeholder="Select" />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="submitterName">Your name (optional)</Label>
-          <Input id="submitterName" name="submitterName" />
+          <Label htmlFor="email">Email (optional)</Label>
+          <Input id="email" name="email" type="email" placeholder="you@example.com" />
+          {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="submitterEmail">Your email (optional)</Label>
-          <Input id="submitterEmail" name="submitterEmail" type="email" />
-          {errors.submitterEmail && (
-            <p className="text-sm text-red-500">{errors.submitterEmail}</p>
-          )}
-        </div>
+        <label className="flex items-start gap-2 text-sm">
+          <input type="checkbox" name="followUpOk" className="mt-1" />
+          <span>
+            <span className="font-medium">AELP can follow up with me</span>
+            <br />
+            <span className="text-xs text-muted-foreground">
+              Your email is never published or shared.
+            </span>
+          </span>
+        </label>
       </div>
 
       {/* Honeypot: hidden from humans, bots tend to fill it */}
