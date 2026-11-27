@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
+import { StatusForm } from "@/components/admin/review/status_form";
 
-export async function ReviewDetails({ id }: { id?: string }) {
+export async function ReviewDetails({ id, tab }: { id?: string; tab: string }) {
   if (!id) {
     return;
   }
@@ -22,6 +23,9 @@ export async function ReviewDetails({ id }: { id?: string }) {
       <p>link: {s.link}</p>
       <p>submitter_info: {s.submitter_info}</p>
       <p>status: {s.status}</p>
+
+
+      <StatusForm id={id} currentStatus={s.status} tab={tab} />
     </div>
   );
 }
