@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { setStatusFromForm } from "@/components/admin/review/actions";
 
 export async function ReviewDetails({ id }: { id?: string }) {
   if (!id) {
@@ -22,6 +23,19 @@ export async function ReviewDetails({ id }: { id?: string }) {
       <p>link: {s.link}</p>
       <p>submitter_info: {s.submitter_info}</p>
       <p>status: {s.status}</p>
+
+
+      <form action={setStatusFromForm} className="flex gap-2 mt-2">
+        <input type="hidden" name="id" value={id} />
+        <label htmlFor="status">Mark as:</label>
+        <select id="status" name="status" defaultValue={s.status} className="border">
+          <option value="new">New</option>
+          <option value="follow-up">Follow-up</option>
+          <option value="reviewed">Reviewed</option>
+          <option value="spam">Spam</option>
+        </select>
+        <button className="border px-2">Save</button>
+      </form>
     </div>
   );
 }
