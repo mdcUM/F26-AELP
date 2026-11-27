@@ -21,8 +21,12 @@ export async function ReviewDetails({ id, tab }: { id?: string; tab: string }) {
       <h2 className="text-lg font-semibold">{s.title}</h2>
       <p>created_at: {s.created_at}</p>
       <p>content: {s.content}</p>
-      <p>link: {s.link}</p>
       <p>submitter_info: {s.submitter_info}</p>
+      <p>industry: {s.industry}</p>
+      <p>state: {s.state}</p>
+      <p>timeframe: {s.timeframe}</p>
+      <p>reporter role: {s.reporter_role}</p>
+      <p>ok to follow up: {s.follow_up_ok ? "yes" : "no"}</p>
       <p>status: {s.status}</p>
 
 

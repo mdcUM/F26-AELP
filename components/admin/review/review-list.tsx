@@ -6,7 +6,7 @@ export async function ReviewList({ status, selectedId }: { status: string ; sele
 
   let query = supabase
   .from("submissions")
-  .select("id, created_at, title, content, link, submitter_info, status");
+  .select("*");
 
   if (status !== "all") {
     query = query.eq("status", status);
