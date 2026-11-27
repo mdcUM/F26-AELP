@@ -11,9 +11,10 @@ export async function ReviewDetails({ id, tab }: { id?: string; tab: string }) {
     .from("submissions")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p>Errpr: {error.message}</p>;
+  if (!s) return <p>Submission not found.</p>;
 
   return (
     <div className="border p-4 flex flex-col gap-2">
@@ -25,7 +26,7 @@ export async function ReviewDetails({ id, tab }: { id?: string; tab: string }) {
       <p>status: {s.status}</p>
 
 
-      <StatusForm id={id} currentStatus={s.status} tab={tab} />
+      <StatusForm id={id} currentStatus={s.status} currentNotes={s.notes} tab={tab} />
     </div>
   );
 }
