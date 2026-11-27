@@ -77,7 +77,7 @@ export function SubmissionForm() {
       <div className="flex flex-col gap-4 rounded-md border p-6">
         <h2 className="text-xl font-semibold">Thank you!</h2>
         <p className="text-sm text-muted-foreground">
-          Your submission was received and will be reviewed by our team.
+          Your report was received. AELP staff review every submission.
         </p>
         <Button className="w-fit" variant="outline" onClick={() => setStatus("idle")}>
           Submit another
@@ -147,9 +147,14 @@ export function SubmissionForm() {
         <p className="text-sm text-red-500">Something went wrong. Please try again.</p>
       )}
 
-      <Button type="submit" disabled={status === "submitting"}>
-        {status === "submitting" ? "Submitting..." : "Submit"}
-      </Button>
+      <div className="flex flex-wrap items-center gap-4 border-t pt-4">
+        <Button type="submit" disabled={status === "submitting"}>
+          {status === "submitting" ? "Submitting..." : "Submit report"}
+        </Button>
+        <p className="text-xs text-muted-foreground">
+          Reports are reviewed by AELP staff before any information is used.
+        </p>
+      </div>
     </form>
   );
 }
