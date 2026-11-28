@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { validateEntry, type EntryErrors } from "@/lib/entries/validation";
 import type { EntryInput, EntryStatus } from "@/lib/types";
@@ -17,9 +18,10 @@ export async function saveEntry(
   const errors = validateEntry(input, status);
   if (Object.keys(errors).length > 0) return { ok: false, errors };
 
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getClaims();
+  const { data: auth } = await (await createClient()).auth.getClaims();
   if (!auth) return { ok: false, message: "Your session expired. Sign in again." };
+
+  const supabase = createAdminClient();
 
   const row = {
     headline: input.headline.trim(),
